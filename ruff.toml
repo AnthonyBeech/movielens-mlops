@@ -1,0 +1,20 @@
+line-length = 120
+target-version = "py310"
+[lint]
+select = ["ALL"]
+ignore = [
+    "COM",
+
+    "D100",
+    "D104",
+    "D212",
+    "D203",
+    "ISC001",
+    "S101",
+    "PD901",
+    "FA100",
+    "G004",
+    "RET504",
+    "INP001",
+    "DTZ005",
+]
