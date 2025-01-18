@@ -1,14 +1,20 @@
 import zipfile
 from pathlib import Path
 
+import pandas as pd
 import requests
 from tqdm import tqdm
 
-# Import your logger setup function
+from movielens.config.config import PROJECT_ROOT
+
 from .logger import setup_logging
 
 logger = setup_logging(__name__)
 
+
+def load_data(path: str = PROJECT_ROOT / "data/movielens/ml-32m/ratings.csv") -> pd.DataFrame:
+    """Load movielens data to df. Ratings by default."""
+    return pd.read_csv(path)
 
 
 def unzip_file(zip_path: str, extract_to: str) -> None:
@@ -30,8 +36,7 @@ def unzip_file(zip_path: str, extract_to: str) -> None:
 
 
 def get_dataset(
-    data_link: str = "https://files.grouplens.org/datasets/movielens/ml-32m.zip",
-    save_dir: str = "data/"
+    data_link: str = "https://files.grouplens.org/datasets/movielens/ml-32m.zip", save_dir: str = "data/"
 ) -> None:
     """
     Download a dataset from the given URL and save it to the specified directory.
@@ -66,12 +71,10 @@ def get_dataset(
     # Handle the case where 'content-length' is missing or 0
     total_chunks = total_size_in_bytes // block_size if total_size_in_bytes else None
 
-    with file_path.open("wb") as file, tqdm(
-        desc=filename,
-        total=total_chunks,
-        unit="KB",
-        unit_scale=True
-    ) as progress_bar:
+    with (
+        file_path.open("wb") as file,
+        tqdm(desc=filename, total=total_chunks, unit="KB", unit_scale=True) as progress_bar,
+    ):
         for data_block in response.iter_content(block_size):
             file.write(data_block)
             progress_bar.update(len(data_block) // block_size)

@@ -1,0 +1,22 @@
+# src/config/config.yaml
+defaults:
+  - override hydra/hydra_logging: disabled
+  - override hydra/job_logging: disabled
+
+seed: 42
+
+paths:
+  root: "${hydra:runtime.cwd}"
+  data: "${paths.root}/data/movielens"
+  
+  ratings_raw: "${paths.root}/ml-32m/ratings.csv"
+
+model:
+  name: "simple"
+  params: {}
+
+training:
+  test_size: 0.2
+
+mlflow:
+  experiment_name: "movielens_recommender_experiment"

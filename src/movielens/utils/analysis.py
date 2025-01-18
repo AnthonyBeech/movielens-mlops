@@ -5,6 +5,7 @@ def count_total_duplicates(row: pd.Series) -> int:
     """Return total duplicate entries (each extra occurrence) in a row."""
     return len(row) - row.nunique()
 
+
 def count_total_unique(row: pd.Series) -> int:
     """Return total unique values in a row."""
     return row.nunique()
@@ -40,13 +41,15 @@ def missing_ratio(row: pd.Series) -> float:
     """Return the ratio of missing values in a row as a float between 0 and 1."""
     return count_missing_values(row) / len(row) if len(row) > 0 else 0.0
 
+
 def top_n_duplicates(row: pd.Series, n: int = 5) -> dict:
     """Return a dictionary of the top n duplicate values in a row sotred."""
     dups = list_duplicates_with_count(row)
     sorted_dups = sorted(dups.items(), key=lambda item: item[1], reverse=True)
     return dict(sorted_dups[:n])
 
-def print_column_checks(df: pd.DataFrame, max_return: int=20) -> None:
+
+def print_column_checks(df: pd.DataFrame, max_return: int = 20) -> None:
     """
     For each column in the DataFrame, print out various checks.
 

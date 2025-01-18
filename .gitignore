@@ -2,3 +2,8 @@
 .venv/
 data/
 .pytest_cache/
+dist/
+logs/
+outputs/
+.ruff_cache/
+__pycache__

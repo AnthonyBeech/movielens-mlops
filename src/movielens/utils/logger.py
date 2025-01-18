@@ -2,15 +2,15 @@ import logging
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
 
-from .config import WORKING_FOLDER
+from movielens.config.config import PROJECT_ROOT
 
 
 def setup_logging(
     logger_name: str | None = None,
     log_level: int = logging.INFO,
-    log_file: str = WORKING_FOLDER + "/logs/src.log",
+    log_file: str = PROJECT_ROOT / "logs/src.log",
     max_bytes: int = 10_000_000,  # 10 MB
-    backup_count: int = 3
+    backup_count: int = 3,
 ) -> logging.Logger:
     """
     Configure and return a logger for the given name or the root logger.
@@ -35,10 +35,7 @@ def setup_logging(
         logger.handlers.clear()
 
     # Common log format
-    formatter = logging.Formatter(
-        fmt="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
-        datefmt="%Y-%m-%d %H:%M:%S"
-    )
+    formatter = logging.Formatter(fmt="%(asctime)s [%(levelname)s] %(name)s: %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
 
     # 1. Console Handler
     console_handler = logging.StreamHandler()
@@ -56,7 +53,7 @@ def setup_logging(
         file_handler = RotatingFileHandler(
             filename=str(log_file_path),  # convert Path to str for older Python versions
             maxBytes=max_bytes,
-            backupCount=backup_count
+            backupCount=backup_count,
         )
         file_handler.setLevel(log_level)
         file_handler.setFormatter(formatter)
