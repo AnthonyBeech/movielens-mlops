@@ -1,10 +1,10 @@
-import pandas as pd
+import logging
 
-from movielens.utils.logger import setup_logging
+import pandas as pd
 
 from .base import BaseRecommender
 
-logger = setup_logging(__name__)
+log = logging.getLogger(__name__)
 
 
 class BaselineRecommender(BaseRecommender):
@@ -22,11 +22,11 @@ class BaselineRecommender(BaseRecommender):
 
     def predict(self, user_id: int, item_id: int) -> float:
         """Predict."""
-        logger.info(f"{user_id}, {item_id}")
+        log.debug(f"{user_id}, {item_id}")
         return self.global_avg
 
     def recommend(self, user_id: int, n: int = 10) -> list:
         """Recommend top N."""
-        logger.info(f"{user_id}")
+        log.debug(f"{user_id}")
         top_items = self.ratings_df.groupby("item_id")["rating"].mean().sort_values(ascending=False).head(n)
         return list(top_items.index)

@@ -1,3 +1,4 @@
+import logging
 import zipfile
 from pathlib import Path
 
@@ -5,17 +6,17 @@ import pandas as pd
 import requests
 from tqdm import tqdm
 
-from movielens.config.config import PROJECT_ROOT
-
-from .logger import setup_logging
-
-logger = setup_logging(__name__)
+log = logging.getLogger(__name__)
 
 
-def load_data(path: str = PROJECT_ROOT / "data/movielens/ml-32m/ratings.csv") -> pd.DataFrame:
+def load_data(path: str, n: int | None = None) -> pd.DataFrame:
     """Load movielens data to df. Ratings by default."""
-    logger.info("loading data")
-    return pd.read_csv(path)
+    log.info("loading data")
+    df = pd.read_csv(path)[:]
+
+    if n:
+        return df[:n]
+    return df
 
 
 def unzip_file(zip_path: str, extract_to: str) -> None:
@@ -33,7 +34,7 @@ def unzip_file(zip_path: str, extract_to: str) -> None:
 
     with zipfile.ZipFile(zip_path, "r") as zip_ref:
         zip_ref.extractall(extract_dir)
-    logger.info(f"Extraction complete. Files have been unzipped to: {extract_dir}")
+    log.info(f"Extraction complete. Files have been unzipped to: {extract_dir}")
 
 
 def get_dataset(
@@ -59,10 +60,10 @@ def get_dataset(
 
     # If the file already exists, log a warning and skip download
     if file_path.exists():
-        logger.warning(f"File already exists at {file_path}. Skipping download.")
+        log.warning(f"File already exists at {file_path}. Skipping download.")
         return
 
-    logger.info(f"Downloading {filename} from {data_link}...")
+    log.info(f"Downloading {filename} from {data_link}...")
     response = requests.get(data_link, stream=True, timeout=50000)
     response.raise_for_status()  # Raise an HTTPError if status code is 4xx or 5xx
 
@@ -80,6 +81,6 @@ def get_dataset(
             file.write(data_block)
             progress_bar.update(len(data_block) // block_size)
 
-    logger.info(f"Download complete. File saved to {file_path}")
+    log.info(f"Download complete. File saved to {file_path}")
 
     unzip_file(file_path, file_path.parent)
