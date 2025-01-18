@@ -8,14 +8,18 @@ from .evaluate import evaluate_model
 from .models.baseline import BaselineRecommender
 from .utils.dataset import load_data
 from .utils.exception import ModelError
+from .utils.logger import setup_logging
+
+logger = setup_logging(__name__)
 
 
 def run_training(cfg: DictConfig) -> None:
     """Run training loop."""
+    logger.info("running training")
     np.random.default_rng(cfg.seed)
 
     # Load ratings data
-    ratings_df = load_data(cfg.data.ratings_path)
+    ratings_df = load_data(cfg.data.ratings_raw)
 
     # Create a train/test split
     train_df, test_df = train_test_split(ratings_df, test_size=cfg.training.test_size, random_state=cfg.seed)
@@ -26,7 +30,7 @@ def run_training(cfg: DictConfig) -> None:
     else:
         raise ModelError(cfg.model.name)
 
-    # Start MLflow experiment run
+    logger.info("starting experiment")
     mlflow.set_experiment(cfg.mlflow.experiment_name)
     with mlflow.start_run():
         # Log parameters
@@ -34,13 +38,12 @@ def run_training(cfg: DictConfig) -> None:
         mlflow.log_params(cfg.model.params)
         mlflow.log_param("test_size", cfg.training.test_size)
 
-        # Fit the model
+        logger.info("fitting model")
         model.fit(train_df)
 
-        # Evaluate the model
+        logger.info("evaluating model")
         metrics = evaluate_model(model, test_df)
         print("Evaluation Metrics:", metrics)
         mlflow.log_metrics(metrics)
 
-        # Log the model artifact
         mlflow.sklearn.log_model(model, "model")

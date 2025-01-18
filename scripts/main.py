@@ -5,14 +5,14 @@ from movielens.config.config import PROJECT_ROOT
 from movielens.train import run_training
 from movielens.utils.logger import setup_logging
 
-setup_logging(__name__)
+logger = setup_logging(__name__)
 
 
-@hydra.main(config_path=str(PROJECT_ROOT / "config"), config_name="config")
+@hydra.main(version_base="1.1", config_path=str(PROJECT_ROOT / "config"), config_name="config")
 def main(cfg: DictConfig) -> None:
     """Train models."""
-    print("Starting training with configuration:")
-    print(OmegaConf.to_yaml(cfg=cfg))
+    logger.info("Starting training with configuration:")
+    logger.info(OmegaConf.to_yaml(cfg=cfg))
     run_training(cfg)
 
 

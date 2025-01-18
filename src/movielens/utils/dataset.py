@@ -14,6 +14,7 @@ logger = setup_logging(__name__)
 
 def load_data(path: str = PROJECT_ROOT / "data/movielens/ml-32m/ratings.csv") -> pd.DataFrame:
     """Load movielens data to df. Ratings by default."""
+    logger.info("loading data")
     return pd.read_csv(path)
 
 
