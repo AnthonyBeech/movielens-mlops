@@ -1,17 +1,14 @@
 import logging
-from pathlib import Path
 
-import hydra
 import mlflow
-import numpy as np
 import pandas as pd
 from omegaconf import DictConfig
 from sklearn.model_selection import train_test_split
 
-from movielens.evaluate import evaluate_model
 from movielens.models.base import BaseRecommender
 from movielens.models.factory import get_factory
 from movielens.utils.dataset import load_data
+from movielens.utils.evaluate import evaluate_model
 
 from .base import BaseTrainer
 
@@ -39,10 +36,6 @@ class BaselineTrainer(BaseTrainer):
 
     def setup_mlflow(self) -> None:
         mlflow.set_experiment(self.cfg.exp.mlflow.experiment_name)
-        original_cwd = Path(hydra.utils.get_original_cwd())
-        tracking_uri = (original_cwd / "mlruns").as_uri()
-        mlflow.set_tracking_uri(tracking_uri)
-        log.info(f"MLflow tracking URI set to: {tracking_uri}")
 
     def load(self) -> pd.DataFrame:
         return load_data(self.cfg.data.ratings_processed, n=self.cfg.exp.n_rows)

@@ -5,6 +5,7 @@ data/
 /dist/
 logs/
 /outputs/
+/mlruns/
 /.ruff_cache/
 *__pycache__*
 /.vscode/
