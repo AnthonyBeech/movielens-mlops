@@ -9,6 +9,49 @@ from tqdm import tqdm
 log = logging.getLogger(__name__)
 
 
+def remove_nulls(df: pd.DataFrame, subset: list | None = None) -> pd.DataFrame:
+    """Remove rows with null values from the DataFrame."""
+    df = df.dropna(subset=subset).reset_index(drop=True)
+    log.debug(f"After dropping nulls: {len(df)}")
+    return df
+
+
+def keep_by_value(
+    df: pd.DataFrame, col: str, min_value: float | None = None, max_value: float | None = None
+) -> pd.DataFrame:
+    """Keep values in column by min/max."""
+    df = df[df[col] > min_value] if min_value is not None else df
+    df = df[df[col] < max_value] if max_value is not None else df
+    log.debug(f"After removing by range: {len(df)}")
+
+
+def keep_by_count(
+    df: pd.DataFrame, col: str, min_count: float | None = None, max_count: float | None = None
+) -> pd.DataFrame:
+    """Keep rows from the DataFrame based on the frequency count of values in a given column."""
+    counts = df[col].value_counts()
+
+    valid = counts[counts > min_count] if min_count is not None else counts
+    valid = valid[valid < max_count] if max_count is not None else valid
+    valid_values = valid.index
+
+    cleaned_df = df[df[col].isin(valid_values)].reset_index(drop=True)
+    log.debug(f"After remove by count: {len(df)}")
+    return cleaned_df
+
+
+def balance_col(df: pd.DataFrame, col: str, random_state: int) -> pd.DataFrame:
+    """Balance the dataset by rating_col."""
+    grouped = df.groupby(col)
+
+    target_count = grouped.size().min()
+
+    balanced_groups = [group.sample(n=target_count, random_state=random_state) for _, group in grouped]
+
+    balanced_df = pd.concat(balanced_groups).reset_index(drop=True)
+    return balanced_df
+
+
 def load_data(path: str, n: int | None = None) -> pd.DataFrame:
     """Load movielens data to df. Ratings by default."""
     log.info("loading data")
@@ -17,6 +60,13 @@ def load_data(path: str, n: int | None = None) -> pd.DataFrame:
     if n:
         return df[:n]
     return df
+
+
+def write_data(df: pd.DataFrame, path: str) -> pd.DataFrame:
+    """Write movielens data to df. Ratings by default."""
+    log.info("writing data")
+    Path(path).mkdir(exist_ok=True, parents=True)
+    df.to_csv(path)
 
 
 def unzip_file(zip_path: str, extract_to: str) -> None:

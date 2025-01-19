@@ -1,5 +1,7 @@
 seed: 42
-n: 1000
+n: null # Limit the amount of data that is read in
+
+min_movie_rating_count: 100
 
 paths:
   root: "${hydra:runtime.cwd}"
@@ -8,6 +10,7 @@ paths:
 
 data:
   ratings_raw: "${paths.data}/ml-32m/ratings.csv"
+  ratings_processed: "${paths.data}/processed/ratings.csv"
 
 model:
   name: "simple"

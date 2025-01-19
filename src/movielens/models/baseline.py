@@ -20,10 +20,10 @@ class BaselineRecommender(BaseRecommender):
         self.ratings_df = df
         self.global_avg = df["rating"].mean()
 
-    def predict(self, user_id: int, item_id: int) -> float:
+    def predict(self, user_id: list[int], item_id: list[int]) -> float:
         """Predict."""
         log.debug(f"{user_id}, {item_id}")
-        return self.global_avg
+        return [self.global_avg] * len(user_id)
 
     def recommend(self, user_id: int, n: int = 10) -> list:
         """Recommend top N."""

@@ -6,4 +6,5 @@ dist/
 logs/
 outputs/
 .ruff_cache/
-__pycache__
+*/__pycache__/*
+.vscode/

@@ -34,9 +34,9 @@ def run_training(cfg: DictConfig) -> None:
     log.info("starting experiment")
     mlflow.set_experiment(cfg.mlflow.experiment_name)
     with mlflow.start_run():
-        # Log parameters
         mlflow.log_param("model_name", cfg.model.name)
         mlflow.log_params(cfg.model.params)
+
         mlflow.log_param("test_size", cfg.training.test_size)
 
         log.info("fitting model")
@@ -46,5 +46,3 @@ def run_training(cfg: DictConfig) -> None:
         metrics = evaluate_model(model, test_df)
         print("Evaluation Metrics:", metrics)
         mlflow.log_metrics(metrics)
-
-        mlflow.sklearn.log_model(model, "model")
