@@ -1,11 +1,9 @@
 defaults:
   - exp/baseline_test
 
-
 paths:
   root: "${hydra:runtime.cwd}"
-  data: "${paths.root}/data/movielens"
-  
+  data: "${paths.root}/data/movielens"  
 
 data:
   ratings_raw: "${paths.data}/ml-32m/ratings.csv"

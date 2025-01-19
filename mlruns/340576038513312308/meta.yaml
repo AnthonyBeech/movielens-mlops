@@ -1,0 +1,6 @@
+artifact_location: file:///C:/Users/abeec/python/repos/movielens/mlruns/340576038513312308
+creation_time: 1737297239527
+experiment_id: '340576038513312308'
+last_update_time: 1737297239527
+lifecycle_stage: active
+name: baseline_test

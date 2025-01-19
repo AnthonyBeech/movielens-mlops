@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/abeec/python/repos/movielens/mlruns/340576038513312308/4cb65b1f94f04da8b83facb96a678d5c/artifacts
+end_time: 1737297240329
+entry_point_name: ''
+experiment_id: '340576038513312308'
+lifecycle_stage: active
+run_id: 4cb65b1f94f04da8b83facb96a678d5c
+run_name: masked-foal-523
+run_uuid: 4cb65b1f94f04da8b83facb96a678d5c
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1737297240250
+status: 3
+tags: []
+user_id: abeec

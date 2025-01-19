@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/abeec/python/repos/movielens/mlruns/340576038513312308/02a4fcfa509c43edb04971987e2fbb8d/artifacts
+end_time: 1737301967791
+entry_point_name: ''
+experiment_id: '340576038513312308'
+lifecycle_stage: active
+run_id: 02a4fcfa509c43edb04971987e2fbb8d
+run_name: righteous-doe-883
+run_uuid: 02a4fcfa509c43edb04971987e2fbb8d
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1737301967715
+status: 4
+tags: []
+user_id: abeec
