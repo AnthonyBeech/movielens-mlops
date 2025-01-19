@@ -5,10 +5,13 @@ from omegaconf import DictConfig, OmegaConf
 from prefect import flow
 
 from movielens.conf.config import PROJECT_ROOT
-from movielens.feature import feature_pipeline
+from movielens.conf.schema import DataColumnsConfig
+from movielens.features.baseline import BaselineFeature
+from movielens.train import run_training
 
 log = logging.getLogger(__name__)
 conf_path = str(PROJECT_ROOT / "conf")
+ccfg = DataColumnsConfig
 
 
 @hydra.main(version_base=None, config_path=conf_path, config_name="config")
@@ -18,9 +21,10 @@ def main(cfg: DictConfig) -> None:
     log.info("Starting training with configuration:")
     log.info(OmegaConf.to_yaml(cfg=cfg))
 
-    df = feature_pipeline(cfg)
+    bsf = BaselineFeature(cfg, ccfg)
+    bsf.run()
 
-    # run_training(cfg)
+    run_training(cfg)
 
 
 if __name__ == "__main__":

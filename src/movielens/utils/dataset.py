@@ -65,8 +65,16 @@ def load_data(path: str, n: int | None = None) -> pd.DataFrame:
 def write_data(df: pd.DataFrame, path: str) -> pd.DataFrame:
     """Write movielens data to df. Ratings by default."""
     log.info("writing data")
-    Path(path).mkdir(exist_ok=True, parents=True)
-    df.to_csv(path)
+    path = Path(path)
+    path.parent.mkdir(exist_ok=True, parents=True)
+    if path.exists():
+        try:
+            path.unlink()
+        except Exception:
+            msg = "Could not delete original csv"
+            log.exception(msg)
+            raise
+    df.to_csv(path, index=False)
 
 
 def unzip_file(zip_path: str, extract_to: str) -> None:
