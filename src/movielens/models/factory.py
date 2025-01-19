@@ -1,3 +1,5 @@
+from omegaconf import DictConfig
+
 from .base import BaseRecommender
 from .baseline import BaselineRecommender
 
@@ -11,8 +13,8 @@ class BaselineRecommenderFactory(BaseFactory):
     def __init__(self) -> None:
         pass
 
-    def create(self) -> BaselineRecommender:
-        return BaselineRecommender()
+    def create(self, cfg: DictConfig) -> BaselineRecommender:
+        return BaselineRecommender(cfg)
 
 
 FACTORY_REGISTRY = {

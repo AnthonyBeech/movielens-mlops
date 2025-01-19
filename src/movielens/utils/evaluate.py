@@ -45,4 +45,4 @@ def evaluate_model(model: BaseRecommender, df: pd.DataFrame) -> dict:
 
     log.info(f"Evaluation metrics: RMSE={rmse}, MAE={mae}, R2={r2}")
 
-    return {"rmse": rmse, "mae": mae, "r2": r2}
+    return {"metrics": {"rmse": rmse, "mae": mae, "r2": r2}, "preds": preds, "truths": truths}

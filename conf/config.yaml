@@ -1,13 +1,19 @@
 defaults:
   - exp/baseline_test
+  - _self_
 
 paths:
   root: "${hydra:runtime.cwd}"
   data: "${paths.root}/data/movielens"  
 
 data:
+  version: 0.0.1
   ratings_raw: "${paths.data}/ml-32m/ratings.csv"
   ratings_processed: "${paths.data}/processed/ratings.csv"
 
 training:
   test_size: 0.2
+
+plots:
+  pred_vs_truth: "pred_vs_truth.png"
+  error_distribution: "error_distribution.png"

@@ -9,6 +9,7 @@ from movielens.models.base import BaseRecommender
 from movielens.models.factory import get_factory
 from movielens.utils.dataset import load_data
 from movielens.utils.evaluate import evaluate_model
+from movielens.utils.plotting import Plotter
 
 from .base import BaseTrainer
 
@@ -24,14 +25,16 @@ class BaselineTrainer(BaseTrainer):
     def __init__(self, cfg: DictConfig) -> None:
         self.cfg = cfg
         self.metrics = {}
+        self.prediction_data = {}
         self._model = None
+        self.plotter = Plotter(cfg)
 
     @property
     def model(self) -> BaseRecommender:
         if self._model is None:
             log.info("Creating model using factory")
             factory = get_factory(self.cfg.exp.model.name)
-            self._model = factory.create()
+            self._model = factory.create(self.cfg)
         return self._model
 
     def setup_mlflow(self) -> None:
@@ -49,13 +52,20 @@ class BaselineTrainer(BaseTrainer):
 
     def evaluate(self, test_df: pd.DataFrame) -> None:
         log.info("Evaluating model")
-        self.metrics = evaluate_model(self.model, test_df)
+        eval_results = evaluate_model(self.model, test_df)
+        self.metrics = eval_results["metrics"]
+        self.prediction_data = {
+            "preds": eval_results["preds"],
+            "truths": eval_results["truths"],
+        }
 
     def log_run(self) -> None:
         mlflow.log_param("model_name", self.cfg.exp.model.name)
         mlflow.log_params(self.cfg.exp.model.params)
         mlflow.log_param("test_size", self.cfg.training.test_size)
         mlflow.log_metrics(self.metrics)
+        mlflow.log_param("data_version", self.cfg.data.version)
+        mlflow.log_artifact(self.cfg.data.ratings_processed, artifact_path="data")
 
     def run(self) -> None:
         log.info("Starting training pipeline")
@@ -68,3 +78,4 @@ class BaselineTrainer(BaseTrainer):
             self.train(train_df)
             self.evaluate(test_df)
             self.log_run()
+            self.plotter.log_plots(truths=self.prediction_data["truths"], preds=self.prediction_data["preds"])
