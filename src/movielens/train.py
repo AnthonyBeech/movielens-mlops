@@ -36,7 +36,6 @@ def run_training(cfg: DictConfig) -> None:
         log.info("fitting model")
         model.fit(train_df)
 
-        log.info("evaluating model")
         metrics = evaluate_model(model, test_df)
         print("Evaluation Metrics:", metrics)
         mlflow.log_metrics(metrics)

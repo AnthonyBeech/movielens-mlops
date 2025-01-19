@@ -52,6 +52,8 @@ class BaselineFeature(BaseFeature):
     @flow()
     def run(self) -> None:
         df = self.load()
+        log.info(f"df size: {len(df)}")
         df = self.clean(df)
         df = self.validate(df)
+        log.info(f"df size: {len(df)}")
         self.write(df)

@@ -1,5 +1,6 @@
 defaults:
-- exp/baseline_test
+  - exp/baseline_test
+
 
 paths:
   root: "${hydra:runtime.cwd}"
