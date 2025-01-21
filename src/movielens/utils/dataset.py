@@ -2,11 +2,23 @@ import logging
 import zipfile
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 import requests
 from tqdm import tqdm
 
+from movielens.conf.schema import DataColumnsConfig
+
 log = logging.getLogger(__name__)
+ccfg = DataColumnsConfig
+
+
+def split(df: pd.DataFrame) -> tuple[np.ndarray, np.ndarray]:
+    """split the df into x,y"""
+    x = df[[ccfg.user_id, ccfg.movie_id]]
+    y = df[ccfg.rating]
+
+    return x, y
 
 
 def remove_nulls(df: pd.DataFrame, subset: list | None = None) -> pd.DataFrame:

@@ -2,6 +2,7 @@ from omegaconf import DictConfig
 
 from .base import BaseRecommender
 from .baseline import BaselineRecommender
+from .classic import SKLearnRegression
 
 
 class BaseFactory:
@@ -17,9 +18,15 @@ class BaselineRecommenderFactory(BaseFactory):
         return BaselineRecommender(cfg)
 
 
-FACTORY_REGISTRY = {
-    "baseline": BaselineRecommenderFactory,
-}
+class SKLearnRegressionFactory(BaseFactory):
+    def __init__(self) -> None:
+        pass
+
+    def create(self) -> SKLearnRegression:
+        return SKLearnRegression()
+
+
+FACTORY_REGISTRY = {"baseline": BaselineRecommenderFactory, "sklearnregression": SKLearnRegressionFactory}
 
 
 def get_factory(factory_name: str) -> BaseFactory:

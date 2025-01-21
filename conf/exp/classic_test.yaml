@@ -1,0 +1,10 @@
+seed: 42
+n_rows: 1000 # Limit the amount of data that is read in
+min_movie_rating_count: 1
+
+model:
+  name: "sklearnregression"
+  params: {}
+
+mlflow:
+  experiment_name: "classic_test"

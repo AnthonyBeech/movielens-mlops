@@ -46,3 +46,40 @@ def evaluate_model(model: BaseRecommender, df: pd.DataFrame) -> dict:
     log.info(f"Evaluation metrics: RMSE={rmse}, MAE={mae}, R2={r2}")
 
     return {"metrics": {"rmse": rmse, "mae": mae, "r2": r2}, "preds": preds, "truths": truths}
+
+
+def evaluate_model_xy(model: BaseRecommender, x: np.ndarray, y: np.ndarray) -> dict:
+    """
+    Evaluate the model on the test set using multiple metrics.
+
+    Metrics calculated:
+      - RMSE: Root Mean Squared Error
+      - MAE: Mean Absolute Error
+      - R2: R-squared (coefficient of determination)
+
+    Parameters:
+        model: The trained recommender model.
+        df: Test dataset as a DataFrame.
+        cfg: Configuration object containing column names (e.g., for user_id, movie_id, rating).
+
+    Returns:
+        A dictionary with evaluation metrics.
+    """
+    log.info("Evaluating model")
+
+    # Predict ratings using the model. Assume cfg contains keys for column names.
+    log.info(f"{model}, {len(x)}, {len(y)}")
+
+    preds = model.predict(x)
+    truths = y
+
+    log.info(f"{len(truths)}, {len(preds)}")
+
+    # Calculate metrics
+    rmse = np.sqrt(mean_squared_error(truths, preds))
+    mae = mean_absolute_error(truths, preds)
+    r2 = r2_score(truths, preds)
+
+    log.info(f"Evaluation metrics: RMSE={rmse}, MAE={mae}, R2={r2}")
+
+    return {"metrics": {"rmse": rmse, "mae": mae, "r2": r2}, "preds": preds, "truths": truths}

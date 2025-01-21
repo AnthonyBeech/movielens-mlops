@@ -1,5 +1,5 @@
 defaults:
-  - exp/baseline_test
+  - exp/classic_test
   - _self_
 
 paths:
