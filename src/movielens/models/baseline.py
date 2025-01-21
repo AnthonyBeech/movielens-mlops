@@ -26,7 +26,7 @@ class BaselineRecommender(BaseRecommender):
         self.global_avg = df["rating"].mean()
         mlflow.sklearn.log_model(self.model, self.cfg.exp.model.name)
 
-    def predict(self, user_id: list[int], item_id: list[int]) -> float:
+    def predict(self, user_id: list[int], item_id: list[int]) -> list[float]:
         """Predict."""
         log.debug(f"{user_id}, {item_id}")
         return [self.global_avg] * len(user_id)
